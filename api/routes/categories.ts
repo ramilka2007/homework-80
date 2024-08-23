@@ -1,10 +1,8 @@
 import express from "express";
-import categoryDb from "../categoriesDb";
+import categoryDb from "../categoryDb";
 import {CategoryMutation} from "../types";
-import categoriesDb from "../categoriesDb";
 
 const categoriesRouter = express.Router();
-
 
 categoriesRouter.post('/', async (req, res) => {
     if (!req.body.name) {
@@ -16,7 +14,7 @@ categoriesRouter.post('/', async (req, res) => {
         description: req.body.description ? req.body.description : '',
     };
 
-    newCategory = await categoriesDb.addItem(newCategory);
+    newCategory = await categoryDb.addItem(newCategory);
 
     return res.send(newCategory);
 });
@@ -31,7 +29,7 @@ categoriesRouter.get('/:id', async (req, res) => {
         return res.status(400).send({"error": "Id params must be in url"});
     }
 
-    let category = await categoriesDb.findCategoryById(req.params.id);
+    let category = await categoryDb.findCategoryById(req.params.id);
 
     if (category) {
         return res.send(category);
@@ -45,7 +43,7 @@ categoriesRouter.delete('/:id', async (req, res) => {
         return res.status(400).send({"error": "Id params must be in url"});
     }
 
-    let category = await categoriesDb.deleteCategoryById(req.params.id);
+    let category = await categoryDb.deleteCategoryById(req.params.id);
     return res.send(category);
 });
 
