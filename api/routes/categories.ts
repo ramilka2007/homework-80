@@ -8,7 +8,7 @@ const categoriesRouter = express.Router();
 
 categoriesRouter.post('/', async (req, res) => {
     if (!req.body.name) {
-        res.status(404).send({"error": "Name is required"});
+        return res.status(404).send({"error": "Name is required"});
     }
 
     let newCategory: CategoryMutation = {
@@ -24,6 +24,29 @@ categoriesRouter.post('/', async (req, res) => {
 categoriesRouter.get("/", async (req, res) => {
     const categories = await categoryDb.getItems();
     return res.send(categories);
+});
+
+categoriesRouter.get('/:id', async (req, res) => {
+    if (!req.params.id) {
+        return res.status(400).send({"error": "Id params must be in url"});
+    }
+
+    let category = await categoriesDb.findCategoryById(req.params.id);
+
+    if (category) {
+        return res.send(category);
+    } else {
+        return res.send('This category was not found');
+    }
+});
+
+categoriesRouter.delete('/:id', async (req, res) => {
+    if (!req.params.id) {
+        return res.status(400).send({"error": "Id params must be in url"});
+    }
+
+    let category = await categoriesDb.deleteCategoryById(req.params.id);
+    return res.send(category);
 });
 
 
