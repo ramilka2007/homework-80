@@ -1,6 +1,7 @@
 import {promises as fs} from 'fs';
 import crypto from 'crypto';
 import {Place, PlaceMutation} from "./types";
+import itemDb from "./itemDb";
 
 const filename = './places.json';
 let data: Place[] = [];
@@ -38,15 +39,18 @@ const placeDb = {
     async deletePlaceById(id: string) {
         if (data.length > 0 && id) {
             let place = await this.findPlaceById(id);
+            let itemByPlaceId = await itemDb.findItemByCategoryIdOrPlaceId(id);
 
             if (place === null) {
-                return 'This category was not found';
+                return 'This place was not found';
             }
 
-            if (place) {
-                data = data.filter(place => place.id !== id);
+            if (place && !itemByPlaceId) {
+                data = data.filter(category => category.id !== id);
                 await this.save();
-                return 'Category was deleted';
+                return 'Place was deleted';
+            } else if (place && itemByPlaceId) {
+                return 'Item has this place id, so first delete item with that placeId';
             }
         }
     },

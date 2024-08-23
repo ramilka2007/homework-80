@@ -13,3 +13,15 @@ export interface Place {
 }
 
 export type PlaceMutation = Omit<Place, 'id'>;
+
+export interface Item {
+    id: string;
+    categoryId: string;
+    placeId: string;
+    name: string;
+    description: string;
+    productionDate: string;
+    image: string | null;
+}
+
+export type ItemMutation = Omit<Item, 'id'>;

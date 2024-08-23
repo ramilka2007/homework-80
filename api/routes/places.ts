@@ -35,7 +35,7 @@ placesRouter.get('/:id', async (req, res) => {
     if (place) {
         return res.send(place);
     } else {
-        return res.send('This category was not found');
+        return res.send('This place was not found');
     }
 });
 
